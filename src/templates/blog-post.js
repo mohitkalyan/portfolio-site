@@ -1,6 +1,6 @@
 import React from 'react';
 import { graphql } from 'gatsby';
-import Image from 'gatsby-image';
+import { GatsbyImage } from 'gatsby-plugin-image';
 
 import MDX from '../components/MDX';
 import Layout from '../components/Layout';
@@ -64,7 +64,7 @@ const BlogPostTemplate = ({ data, location }) => {
           <h1 id="introduction">{title}</h1>
         </header>
         {featured && (
-          <Image
+          <GatsbyImage
             style={{
               marginBottom: '2rem',
             }}
@@ -104,7 +104,7 @@ export const pageQuery = graphql`
         description
         featured {
           childImageSharp {
-            sizes(maxWidth: 720, quality: 90, toFormat: JPG) {
+            sizes(maxWidth: 720, quality: 90) {
               ...GatsbyImageSharpSizes_withWebp
             }
           }
@@ -140,9 +140,7 @@ export const pageQuery = graphql`
           frontmatter {
             thumbnail {
               childImageSharp {
-                fluid(maxWidth: 114, quality: 90, toFormat: JPG) {
-                  ...GatsbyImageSharpFluid_withWebp
-                }
+                gatsbyImageData(maxWidth: 114, quality: 90, layout: FLUID)
               }
             }
             tags

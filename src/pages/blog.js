@@ -91,7 +91,7 @@ const Blog = ({ data, location }) => {
 export default Blog;
 
 export const query = graphql`
-  query {
+  {
     site {
       siteMetadata {
         title
@@ -117,9 +117,7 @@ export const query = graphql`
               publicURL
               extension
               childImageSharp {
-                fluid(maxWidth: 114, quality: 90, toFormat: JPG) {
-                  ...GatsbyImageSharpFluid_withWebp
-                }
+                gatsbyImageData(maxWidth: 114, quality: 90, layout: FLUID)
               }
             }
             tags

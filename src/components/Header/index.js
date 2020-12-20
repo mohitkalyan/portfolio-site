@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useStaticQuery, graphql } from 'gatsby';
-import Image from 'gatsby-image';
+import { GatsbyImage } from 'gatsby-plugin-image';
 
 import Navigation from '../Navigation';
 import PageUtils from '../PageUtils';
@@ -15,12 +15,10 @@ const Header = ({ className, isClose, onClick }) => {
   const dispatch = useContext()[1];
 
   const data = useStaticQuery(graphql`
-    query {
+    {
       file(relativePath: { eq: "avatar.png" }) {
         childImageSharp {
-          fixed(width: 40, height: 40) {
-            ...GatsbyImageSharpFixed
-          }
+          gatsbyImageData(width: 40, height: 40, layout: FIXED)
         }
       }
     }
@@ -32,10 +30,10 @@ const Header = ({ className, isClose, onClick }) => {
         <div className={styles.container}>
           <div className={styles.headerLeft}>
             <Link to="/" onClick={onClick || null}>
-              <Image
+              <GatsbyImage
+                image={data.file.childImageSharp.gatsbyImageData}
                 className={styles.avatar}
                 style={{ width: '38px', height: '38px' }}
-                fixed={data.file.childImageSharp.fixed}
               />
               Adam Collier
             </Link>

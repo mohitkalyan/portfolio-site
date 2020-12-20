@@ -1,6 +1,6 @@
 import React from 'react';
 import { useStaticQuery, graphql } from 'gatsby';
-import Image from 'gatsby-image';
+import { GatsbyImage } from 'gatsby-plugin-image';
 import styles from './film-cover.module.css';
 
 const FilmCover = ({ cover, title, year, genre, rating = 1, className }) => {
@@ -10,9 +10,7 @@ const FilmCover = ({ cover, title, year, genre, rating = 1, className }) => {
         edges {
           node {
             childImageSharp {
-              fluid(maxWidth: 114, quality: 90, toFormat: JPG) {
-                ...GatsbyImageSharpFluid_withWebp
-              }
+              gatsbyImageData(maxWidth: 114, quality: 90, layout: FLUID)
             }
             base
           }
@@ -27,9 +25,9 @@ const FilmCover = ({ cover, title, year, genre, rating = 1, className }) => {
 
   return (
     <div className={`${className} ${styles.cover}`}>
-      <Image
+      <GatsbyImage
+        image={filmCover.childImageSharp.gatsbyImageData}
         className={styles.image}
-        fluid={filmCover.childImageSharp.fluid}
         alt={`${title} film cover`}
       />
       <p className={styles.genre}>{genre}</p>

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { graphql } from 'gatsby';
-import Image from 'gatsby-image';
+import { GatsbyImage } from 'gatsby-plugin-image';
 
 import MDX from '../components/MDX';
 import Layout from '../components/Layout';
@@ -70,9 +70,9 @@ const BlogPostTemplate = ({ data, location }) => {
     : null;
 
   const featuredSources = [
-    { ...mobileFeatured.childImageSharp.fluid, media: `max-width: 767px` },
+    mobileFeatured.childImageSharp.gatsbyImageData,
     {
-      ...desktopFeatured.childImageSharp.fluid,
+      ...desktopFeatured.childImageSharp.gatsbyImageData,
       media: `(min-width: 768px)`,
     },
   ];
@@ -90,7 +90,17 @@ const BlogPostTemplate = ({ data, location }) => {
         pathname={location.pathname}
       />
       <div className={styles.heroWrapper}>
-        <Image fluid={featuredSources} />
+        {useMediaQuery('(min-width: 768px)') ? (
+          <GatsbyImage
+            image={desktopFeatured.childImageSharp.gatsbyImageData}
+            alt="featured image"
+          />
+        ) : (
+          <GatsbyImage
+            image={mobileFeatured.childImageSharp.gatsbyImageData}
+            alt="featured image"
+          />
+        )}
       </div>
       <Sidebar
         className={styles.sidebar}
@@ -156,16 +166,23 @@ export const pageQuery = graphql`
         invertHeaderColor
         desktopFeatured: featured {
           childImageSharp {
-            fluid(maxWidth: 1920, maxHeight: 800, quality: 90, toFormat: JPG) {
-              ...GatsbyImageSharpFluid_withWebp
-            }
+            gatsbyImageData(
+              maxWidth: 1920
+              maxHeight: 800
+              quality: 90
+              layout: FLUID
+              placeholder: DOMINANT_COLOR
+            )
           }
         }
         mobileFeatured: featured {
           childImageSharp {
-            fluid(maxWidth: 768, maxHeight: 650, quality: 90, toFormat: JPG) {
-              ...GatsbyImageSharpFluid_withWebp
-            }
+            gatsbyImageData(
+              maxWidth: 768
+              maxHeight: 650
+              quality: 90
+              layout: FLUID
+            )
           }
         }
         image: featured {
@@ -199,9 +216,7 @@ export const pageQuery = graphql`
           frontmatter {
             thumbnail {
               childImageSharp {
-                fluid(maxWidth: 114, quality: 90, toFormat: JPG) {
-                  ...GatsbyImageSharpFluid_withWebp
-                }
+                gatsbyImageData(maxWidth: 114, quality: 90, layout: FLUID)
               }
             }
             tags

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useStaticQuery, graphql } from 'gatsby';
-import Image from 'gatsby-image';
+import { GatsbyImage } from 'gatsby-plugin-image';
 import {
   GitCommit,
   Box,
@@ -18,16 +18,12 @@ import CodeBlock from '../../CodeBlock';
 
 const November = () => {
   const data = useStaticQuery(graphql`
-    query {
+    {
       allFile(filter: { relativeDirectory: { eq: "timeline/2020/images" } }) {
         edges {
           node {
             childImageSharp {
-              # Specify the image processing specifications right in the query.
-              # Makes it trivial to update as your page's design changes.
-              fluid(maxWidth: 300) {
-                ...GatsbyImageSharpFluid
-              }
+              gatsbyImageData(maxWidth: 300, layout: FLUID)
             }
           }
         }
@@ -44,9 +40,7 @@ const November = () => {
             publicURL
             extension
             childImageSharp {
-              fluid(maxWidth: 114, quality: 90, toFormat: JPG) {
-                ...GatsbyImageSharpFluid_withWebp
-              }
+              gatsbyImageData(maxWidth: 114, quality: 90, layout: FLUID)
             }
           }
         }
@@ -88,13 +82,13 @@ const November = () => {
           {`
 // inside our component we add the props we want as arguments for props.children
 const Blocks = ({ allBlocks, children }) =>
-  allBlocks.map((block, index) => <div>{children(block, index)}</div>);
+allBlocks.map((block, index) => <div>{children(block, index)}</div>);
 
 // then we can access those arguments via a function
 <Blocks allBlocks={state.allBlocks}>
-  {(block, index) => {
-    return <DynamicBlock block={block} index={index} />;
-  }}
+{(block, index) => {
+  return <DynamicBlock block={block} index={index} />;
+}}
 </Blocks>;
 `}
         </CodeBlock>
@@ -109,23 +103,23 @@ const Blocks = ({ allBlocks, children }) =>
 import { useState, useEffect } from 'react';
 
 export function useMediaQuery(query) {
-  const [matches, setMatches] = useState(false);
+const [matches, setMatches] = useState(false);
 
-  useEffect(() => {
-    const media = window.matchMedia(query);
-    if (media.matches !== matches) {
-      setMatches(media.matches);
-    }
-    const listener = () => {
-      setMatches(media.matches);
-    };
-    media.addListener(listener);
-    return () => media.removeListener(listener);
-  }, [matches, query]);
+useEffect(() => {
+  const media = window.matchMedia(query);
+  if (media.matches !== matches) {
+    setMatches(media.matches);
+  }
+  const listener = () => {
+    setMatches(media.matches);
+  };
+  media.addListener(listener);
+  return () => media.removeListener(listener);
+}, [matches, query]);
 
-  return matches;
+return matches;
 }
-          `}
+        `}
         </CodeBlock>
         <p>
           Taken from <a href="https://twitter.com/cassidoo">@cassidoo's</a> post{' '}
@@ -163,8 +157,12 @@ export function useMediaQuery(query) {
           starting to get a feel for space and composition.
         </p>
         <Grid gridTemplateColumns="repeat(2, minmax(0, 1fr))" gridGap="0.5rem">
-          <Image fluid={data.allFile.edges[1].node.childImageSharp.fluid} />
-          <Image fluid={data.allFile.edges[0].node.childImageSharp.fluid} />
+          <GatsbyImage
+            image={data.allFile.edges[1].node.childImageSharp.gatsbyImageData}
+          />
+          <GatsbyImage
+            image={data.allFile.edges[0].node.childImageSharp.gatsbyImageData}
+          />
         </Grid>
       </TimelineEntry>
       <TimelineEntry
