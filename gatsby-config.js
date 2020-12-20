@@ -8,8 +8,6 @@ module.exports = {
     keywords: ['Adam Collier', 'gatsby', 'blog', 'resources', 'snippets'],
   },
   plugins: [
-    `gatsby-plugin-react-helmet`,
-    'gatsby-plugin-sitemap',
     {
       resolve: `gatsby-source-filesystem`,
       options: {
@@ -24,6 +22,11 @@ module.exports = {
         path: `${__dirname}/src/images`,
       },
     },
+    `gatsby-plugin-image`,
+    `gatsby-plugin-react-helmet`,
+    'gatsby-plugin-sitemap',
+    `gatsby-transformer-sharp`,
+    `gatsby-plugin-sharp`,
     {
       resolve: `gatsby-transformer-remark`,
       options: {
@@ -54,8 +57,6 @@ module.exports = {
         ],
       },
     },
-    `gatsby-transformer-sharp`,
-    `gatsby-plugin-sharp`,
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
